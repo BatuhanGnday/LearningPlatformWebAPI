@@ -1,12 +1,11 @@
 using System.ComponentModel;
 
-namespace LearningPlatformWebAPI.Models
+namespace LearningPlatformWebAPI.Database.Models
 {
     public class QuestionChoice : ModelBase
     {
         public string Content { get; set; }
-        
-        [DefaultValue(false)]
-        public bool IsTrue { get; set; } 
+
+        [DefaultValue(false)] public bool IsTrue { get; set; }
     }
 }

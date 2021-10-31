@@ -1,15 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using LearningPlatformWebAPI.Database.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningPlatformWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("exams")]
     [ApiController]
     public class ExamController : ControllerBase
     {
+        private readonly UnitOfWork _unitOfWork;
+
+        public ExamController(UnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
     }
 }

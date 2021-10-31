@@ -1,6 +1,6 @@
 namespace LearningPlatformWebAPI.Database.Repositories.Question
 {
-    public interface IQuetionRepository
+    public interface IQuestionRepository : IRepository<Models.Question>
     {
         
     }

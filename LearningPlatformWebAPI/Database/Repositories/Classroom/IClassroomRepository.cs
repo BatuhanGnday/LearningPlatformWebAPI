@@ -1,6 +1,6 @@
 namespace LearningPlatformWebAPI.Database.Repositories.Classroom
 {
-    public interface IClassroomInterface
+    public interface IClassroomRepository: IRepository<Models.Classroom>
     {
         
     }

@@ -35,7 +35,7 @@ namespace LearningPlatformWebAPI.Migrations
                     b.ToTable("ClassroomUser");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Classroom", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Classroom", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -51,6 +51,7 @@ namespace LearningPlatformWebAPI.Migrations
                         .HasColumnType("timestamp");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<LocalDateTime>("UpdatedAt")
@@ -61,7 +62,7 @@ namespace LearningPlatformWebAPI.Migrations
                     b.ToTable("Classrooms");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Course", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Course", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -73,23 +74,38 @@ namespace LearningPlatformWebAPI.Migrations
                     b.Property<LocalDateTime>("CreatedAt")
                         .HasColumnType("timestamp");
 
+                    b.Property<string>("DayOfWeek")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<LocalDateTime?>("DeletedAt")
                         .HasColumnType("timestamp");
 
                     b.Property<int>("Duration")
                         .HasColumnType("integer");
 
-                    b.Property<LocalTime>("End")
+                    b.Property<LocalTime?>("EndTime")
+                        .IsRequired()
                         .HasColumnType("time");
 
-                    b.Property<LocalTime>("Start")
+                    b.Property<string>("MeetingUrl")
+                        .HasColumnType("text");
+
+                    b.Property<LocalTime>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<LocalDateTime>("UpdatedAt")
                         .HasColumnType("timestamp");
+
+                    b.Property<LocalDate?>("ValidAfter")
+                        .HasColumnType("date");
+
+                    b.Property<LocalDate?>("ValidUntil")
+                        .HasColumnType("date");
 
                     b.HasKey("Guid");
 
@@ -98,7 +114,7 @@ namespace LearningPlatformWebAPI.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Exam", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Exam", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -134,7 +150,7 @@ namespace LearningPlatformWebAPI.Migrations
                     b.ToTable("Exams");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Question", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Question", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -155,6 +171,9 @@ namespace LearningPlatformWebAPI.Migrations
                     b.Property<int?>("Grade")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("boolean");
+
                     b.Property<LocalDateTime>("UpdatedAt")
                         .HasColumnType("timestamp");
 
@@ -165,7 +184,7 @@ namespace LearningPlatformWebAPI.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.QuestionChoice", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.QuestionChoice", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -196,7 +215,7 @@ namespace LearningPlatformWebAPI.Migrations
                     b.ToTable("QuestionChoices");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.User", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.User", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -225,7 +244,7 @@ namespace LearningPlatformWebAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.UserRole", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.UserRole", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -268,35 +287,35 @@ namespace LearningPlatformWebAPI.Migrations
 
             modelBuilder.Entity("ClassroomUser", b =>
                 {
-                    b.HasOne("LearningPlatformWebAPI.Models.Classroom", null)
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.Classroom", null)
                         .WithMany()
                         .HasForeignKey("ClassroomsGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LearningPlatformWebAPI.Models.User", null)
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.User", null)
                         .WithMany()
                         .HasForeignKey("ParticipantsGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Course", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Course", b =>
                 {
-                    b.HasOne("LearningPlatformWebAPI.Models.Classroom", "Classroom")
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.Classroom", "Classroom")
                         .WithMany("Courses")
                         .HasForeignKey("ClassroomGuid");
 
                     b.Navigation("Classroom");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Exam", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Exam", b =>
                 {
-                    b.HasOne("LearningPlatformWebAPI.Models.Classroom", "Classroom")
-                        .WithMany()
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.Classroom", "Classroom")
+                        .WithMany("Exams")
                         .HasForeignKey("ClassroomGuid");
 
-                    b.HasOne("LearningPlatformWebAPI.Models.User", "CreatedBy")
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedByGuid");
 
@@ -305,46 +324,48 @@ namespace LearningPlatformWebAPI.Migrations
                     b.Navigation("CreatedBy");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Question", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Question", b =>
                 {
-                    b.HasOne("LearningPlatformWebAPI.Models.Exam", null)
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.Exam", null)
                         .WithMany("Questions")
                         .HasForeignKey("ExamGuid");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.QuestionChoice", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.QuestionChoice", b =>
                 {
-                    b.HasOne("LearningPlatformWebAPI.Models.Question", null)
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.Question", null)
                         .WithMany("Options")
                         .HasForeignKey("QuestionGuid");
                 });
 
             modelBuilder.Entity("UserUserRole", b =>
                 {
-                    b.HasOne("LearningPlatformWebAPI.Models.UserRole", null)
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.UserRole", null)
                         .WithMany()
                         .HasForeignKey("RolesGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LearningPlatformWebAPI.Models.User", null)
+                    b.HasOne("LearningPlatformWebAPI.Database.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UsersGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Classroom", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Classroom", b =>
                 {
                     b.Navigation("Courses");
+
+                    b.Navigation("Exams");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Exam", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Exam", b =>
                 {
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("LearningPlatformWebAPI.Models.Question", b =>
+            modelBuilder.Entity("LearningPlatformWebAPI.Database.Models.Question", b =>
                 {
                     b.Navigation("Options");
                 });

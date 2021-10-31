@@ -1,4 +1,4 @@
-namespace LearningPlatformWebAPI.Models
+namespace LearningPlatformWebAPI.Database.Models
 {
     public enum RolePermission
     {

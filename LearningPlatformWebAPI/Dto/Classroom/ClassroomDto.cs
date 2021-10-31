@@ -1,4 +1,4 @@
-namespace LearningPlatformWebAPI.Dto
+namespace LearningPlatformWebAPI.Dto.Classroom
 {
     public class ClassroomDto
     {

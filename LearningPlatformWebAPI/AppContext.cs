@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
-using LearningPlatformWebAPI.Models;
+using EntityFrameworkCore.SqlServer.NodaTime.Extensions;
+using LearningPlatformWebAPI.Database.Models;
+using LearningPlatformWebAPI.Database.Models.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NodaTime;
-using Npgsql;
 
 namespace LearningPlatformWebAPI
 {
@@ -16,6 +17,7 @@ namespace LearningPlatformWebAPI
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionChoice> QuestionChoices { get; set; }
+        public DbSet<Course> Courses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,8 +25,13 @@ namespace LearningPlatformWebAPI
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
+            // optionsBuilder.UseSqlServer(
+            //     configuration.GetConnectionString("DefaultConnection"),
+            //     o => o.UseNodaTime()
+            // );
+            
             optionsBuilder.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection"), 
+                configuration.GetConnectionString("DefaultConnection"),
                 o => o.UseNodaTime());
         }
 
@@ -32,38 +39,35 @@ namespace LearningPlatformWebAPI
         {
             var entries = ChangeTracker
                 .Entries()
-                .Where(e => e.Entity is ModelBase && e.State is EntityState.Added or EntityState.Modified);
-            
+                .Where(e => e.Entity is ModelBase &&
+                            e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted);
+
             foreach (var entityEntry in entries)
             {
                 ((ModelBase) entityEntry.Entity).UpdatedAt = LocalDateTime.FromDateTime(DateTime.Now);
                 switch (entityEntry.State)
                 {
                     case EntityState.Added:
-                        ((ModelBase)entityEntry.Entity).CreatedAt = LocalDateTime.FromDateTime(DateTime.Now);
+                        ((ModelBase) entityEntry.Entity).CreatedAt = LocalDateTime.FromDateTime(DateTime.Now);
                         break;
                     case EntityState.Deleted:
-                        ((ModelBase)entityEntry.Entity).DeletedAt = LocalDateTime.FromDateTime(DateTime.Now);
+                        ((ModelBase) entityEntry.Entity).DeletedAt = LocalDateTime.FromDateTime(DateTime.Now);
+                        break;
+                    case EntityState.Modified:
+                        ((ModelBase) entityEntry.Entity).UpdatedAt = LocalDateTime.FromDateTime(DateTime.Now);
                         break;
                 }
             }
-            
+
             return base.SaveChanges();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasMany(r => r.Roles)
-                .WithMany(u => u.Users);
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ClassroomConfiguration());
+            modelBuilder.ApplyConfiguration(new CourseConfiguration());
 
-            modelBuilder.Entity<Classroom>()
-                .HasMany(r => r.Participants)
-                .WithMany(u => u.Classrooms);
-            
-            
-            modelBuilder.Entity<Classroom>();
-            
 
             base.OnModelCreating(modelBuilder);
         }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NodaTime;
 
-namespace LearningPlatformWebAPI.Models
+namespace LearningPlatformWebAPI.Database.Models
 {
     public class Exam : ModelBase
     {
@@ -9,7 +9,7 @@ namespace LearningPlatformWebAPI.Models
         public LocalDateTime Start { get; set; }
         public LocalDateTime End { get; set; }
         public User CreatedBy { get; set; }
-        
+
         public virtual IEnumerable<Question> Questions { get; set; }
     }
 }

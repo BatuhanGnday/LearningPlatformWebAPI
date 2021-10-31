@@ -1,7 +1,9 @@
 namespace LearningPlatformWebAPI.Database.Repositories.User
 {
-    public class UserRepository
+    public class UserRepository : Repository<Models.User>, IUserRepository
     {
-        
+        public UserRepository(AppContext appContext) : base(appContext)
+        {
+        }
     }
 }

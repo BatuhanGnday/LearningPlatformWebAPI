@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using NodaTime;
 
-namespace LearningPlatformWebAPI.Models
+namespace LearningPlatformWebAPI.Database.Models
 {
     public abstract class ModelBase
     {
@@ -13,7 +13,7 @@ namespace LearningPlatformWebAPI.Models
 
         public LocalDateTime CreatedAt { get; set; }
         public LocalDateTime UpdatedAt { get; set; }
-        
+
         public LocalDateTime? DeletedAt { get; set; }
     }
 }

@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NodaTime;
 
-namespace LearningPlatformWebAPI.Models.Configurations
+namespace LearningPlatformWebAPI.Database.Models.Configurations
 {
     public class CourseConfiguration : IEntityTypeConfiguration<Course>
     {
@@ -13,7 +12,6 @@ namespace LearningPlatformWebAPI.Models.Configurations
             builder
                 .Property(p => p.DayOfWeek)
                 .HasConversion(new EnumToStringConverter<IsoDayOfWeek>());
-            
         }
     }
 }

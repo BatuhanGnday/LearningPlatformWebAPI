@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LearningPlatformWebAPI.Models.Configurations
+namespace LearningPlatformWebAPI.Database.Models.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {
